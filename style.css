@@ -1,0 +1,14 @@
+html {
+    font-family: 'arial', sans-serif;
+    text-align: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#title {
+    font-size: 30px;
+}
+
+#searchresults {
+    text-align: left;
+}
