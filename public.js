@@ -50,7 +50,7 @@ function onAnchorClick(event) {
   return false;
 }
 
-fetch('/api')
+fetch('/search/api')
   .then(response => {
     if (!response.ok) {
       throw new Error('couldnt get from server');
