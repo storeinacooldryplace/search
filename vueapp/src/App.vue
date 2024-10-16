@@ -1,7 +1,7 @@
 <template>
   <img id="title-logo" src="./assets/peeple.png">
-  <h1 id="username">Justine Jung</h1>
   <div id="user-display">
+    <h1 id="username">Justine Jung</h1>
     <UserDisplay class="userinfo" />
   </div>
   <div id="app">

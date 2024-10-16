@@ -1,6 +1,6 @@
 <template>
   <div class="emoji-container" @mouseover="showMenu = true" @mouseleave="showMenu = false">
-    <img id="face" src="@/assets/react.png" />
+    <img id="face" src="@/assets/search-icon.png" />
     <div class="emoji-trigger" @click="toggleMenu">
       <!-- Trigger emoji -->
     </div>
