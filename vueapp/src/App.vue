@@ -1,6 +1,9 @@
 <template>
   <img id="title-logo" src="./assets/peeple.png">
   <h1 id="username">Justine Jung</h1>
+  <div id="user-display">
+    <UserDisplay class="userinfo" />
+  </div>
   <div id="app">
     <TimelineComponent class="timeline" :history="history" />
   </div>
@@ -9,10 +12,13 @@
 <script>
 import TimelineComponent from './components/TimelineComponent.vue';
 
+import UserDisplay from './components/UserDisplay.vue';
+
 export default {
   name: 'App',
   components: {
     TimelineComponent,
+    UserDisplay
   },
   data() {
     return {
