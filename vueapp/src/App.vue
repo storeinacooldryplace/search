@@ -55,7 +55,7 @@ export default {
 }
 
 #username {
-  position: fixed;
+  position: absolute;
   top: 0px;
   right: 20px;
   font-size: 100px

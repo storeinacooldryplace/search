@@ -46,6 +46,6 @@ export default {
 
 <style>
 * {
-  margin-left: 20px;
+  margin-left: 10px;
 }
 </style>
