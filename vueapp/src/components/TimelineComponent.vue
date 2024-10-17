@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="timeline">
     <DateItem v-for="(dateArr, index) in groupedHistory" :key="index" :date="dateArr[0].date" :items="dateArr" />
   </div>
 </template>
@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style>
-* {
-  margin-left: 10px;
+#timeline {
+  margin-left: 20px;
 }
 </style>
