@@ -2,7 +2,7 @@
   <div id="app-container">
 
     <aside id="left-sidebar">
-      <img id="title-logo" src="./assets/searchhistorylogo.png">
+      <img id="title-logo" src="./assets/search-logo.png">
       <div class="icon-container">
         <a href="#" class="icon-link" @click.prevent="currentPage = 'home'">
           <img src="./assets/home-icon.svg" alt="Home" />
@@ -104,9 +104,9 @@ export default {
 
 #title-logo {
   display: block;
-  width: 200px;
+  width: 100px;
   height: auto;
-  margin: 0 auto;
+
 }
 
 #left-sidebar {
@@ -170,11 +170,12 @@ export default {
 
 #timeline-header {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 220px;
   /* Evenly space the links */
   padding: 50px 0 0 0;
   /* Add padding for visual spacing */
-  border-bottom: 1px solid #e6e5e5;
+  border-bottom: 1px solid #f7f6f6;
   /* Optional: Add a bottom border */
   font-size: 20px;
 }
@@ -188,16 +189,16 @@ export default {
 #timeline-header span.active {
   color: black;
   /* Color for the selected view */
-  font-weight: bold;
+
   /* Optionally make it bold */
 }
 
 #timeline-header span.active::after {
   content: '';
   display: block;
-  height: 4px;
-  background-color: rgb(132, 183, 131);
+  height: 7px;
+  background-color: rgb(23, 170, 20);
   bottom: -20px;
-  border-radius: 2px;
+  border-radius: 5px;
 }
 </style>

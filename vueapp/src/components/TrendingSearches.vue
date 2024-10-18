@@ -3,6 +3,7 @@
     <h1>Trending Searches</h1>
     <TrendingSearch />
     <TrendingSearch />
+    <TrendingSearch />
   </div>
 </template>
 
@@ -23,8 +24,8 @@ export default {
 <style>
 .trending-container {
   margin: 10px;
-  margin-top: 20px;
-  gap: 0px
+  margin-top: 50px;
+  gap: 0px;
 }
 
 .trending-container h1 {

@@ -45,7 +45,7 @@ ul {
 li {
   padding: 0px;
   margin-bottom: 0px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 0.5px solid #ececec;
   display: flex;
   align-items: center;
 }

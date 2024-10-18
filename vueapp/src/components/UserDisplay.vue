@@ -1,7 +1,7 @@
 <template>
   <div class="user-profile">
     <div class="user-banner"></div>
-    <img class="user-pfp" src="@/assets/headshot.jpg">
+    <img class="user-pfp" src="@/assets/headshot2.jpg">
     <div class="user-stats">
 
       <div class="user-ID">
@@ -58,7 +58,8 @@ export default {
   background-color: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   margin-bottom: 10px;
-  object-fit: cover
+  object-fit: cover;
+  margin-top: -20%
 }
 
 .user-stats {
