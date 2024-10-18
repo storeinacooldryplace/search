@@ -17,8 +17,10 @@
 
       <div v-if="currentPage === 'home'">
         <header id="timeline-header">
-          <span @click="toggleView('recent')" :class="{ active: currentView === 'recent' }">Recent</span>
           <span @click="toggleView('top')" :class="{ active: currentView === 'top' }">Top</span>
+
+          <span @click="toggleView('recent')" :class="{ active: currentView === 'recent' }">Recent</span>
+
         </header>
 
 
@@ -90,12 +92,14 @@ export default {
 <style>
 #app-container {
   display: grid;
-  grid-template-columns: 200px 1fr 400px;
+  grid-template-columns: 200px 800px 400px;
   /* Left Sidebar | Main Content | Right Sidebar */
   grid-template-areas:
     "left-sidebar main-content right-sidebar";
   height: 100vh;
   font-family: 'Inter';
+  margin: 0 auto;
+  max-width: 1200px;
 }
 
 #title-logo {
@@ -111,14 +115,16 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
-  border-right: 0.5px solid #ccc;
-
+  align-items: flex-end;
+  border-right: 0.5px solid #e6e5e5;
 }
 
 .icon-container {
   flex-direction: column;
-  display: flex
+  display: flex;
+  margin-top: 90px;
+  gap: 20px;
+  margin-right: 15px
 }
 
 .icon-container img {
@@ -131,7 +137,7 @@ export default {
 #right-sidebar {
   grid-area: right-sidebar;
   padding: 20px;
-  border-left: 0.5px solid #ccc;
+  border-left: 0.5px solid #e6e5e5;
   /* Border to separate from main content */
   display: flex;
   /* Flexbox for layout */
@@ -149,12 +155,17 @@ export default {
 }
 
 #user-display {
-  background-color: bisque;
+  background-color: rgb(213, 212, 211);
   /* Background color for visibility */
 }
 
 .icon-link {
   width: 20px
+}
+
+#main-content {
+  /* Optional: set a max-width for main content */
+  /* Center main content within its grid area */
 }
 
 #timeline-header {
@@ -163,7 +174,7 @@ export default {
   /* Evenly space the links */
   padding: 50px 0 0 0;
   /* Add padding for visual spacing */
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #e6e5e5;
   /* Optional: Add a bottom border */
   font-size: 20px;
 }
@@ -171,6 +182,7 @@ export default {
 #timeline-header span {
   cursor: pointer;
   color: grey;
+  font-size: 30px;
 }
 
 #timeline-header span.active {

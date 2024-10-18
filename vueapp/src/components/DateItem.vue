@@ -57,7 +57,7 @@ export default {
   /* Center vertically */
   cursor: pointer;
   /* Show pointer on hover */
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .toggle-icon {
