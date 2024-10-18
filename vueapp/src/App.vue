@@ -6,10 +6,10 @@
     <a href="#" v-else @click.prevent="currentPage = 'home'">Back</a>
   </nav>
 
-  <!-- <div id="user-display">
+  <div id="user-display">
     <h1 id="username">Justine Jung</h1>
     <UserDisplay class="userinfo" />
-  </div> -->
+  </div>
 
   <div v-if="currentPage === 'home'">
     <div id="app">
@@ -71,19 +71,20 @@ export default {
 }
 
 .timeline {
-  margin-top: 600px
+  margin-top: 50vh
 }
 
 #title-logo {
   display: block;
   /* Make the image a block element */
-  width: 1200px;
+  width: 60vw;
   /* Your specified width */
   height: auto;
   /* Maintain aspect ratio */
   margin: 0 auto;
   /* Center the image horizontally */
-  position: fixed;
+  /* position: fixed; */
+  position: absolute;
   /* Fix the logo to the viewport */
   top: 0;
   /* Aligns it to the top of the viewport */
