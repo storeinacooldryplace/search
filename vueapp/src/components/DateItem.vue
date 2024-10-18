@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <h2 @click="toggleItems" class="date-header">
+  <div id="date-container">
+    <div @click="toggleItems" class="date-header">
       <img :src="showItems ? downArrow : rightArrow" alt="Toggle" class="toggle-icon" />
       {{ formattedDate }}
-    </h2>
+    </div>
     <ul v-if="showItems">
       <ListItem v-for="(item, index) in items" :key="index" :title="item.title" :url="item.url"
         :time="item.visitItem[0].visitTime" />
@@ -57,6 +57,7 @@ export default {
   /* Center vertically */
   cursor: pointer;
   /* Show pointer on hover */
+  font-size: 20px;
 }
 
 .toggle-icon {
@@ -70,5 +71,10 @@ export default {
 
 .date-header {
   padding-top: 10px
+}
+
+#date-container {
+  margin-top: 40px;
+  margin-left: 15px
 }
 </style>

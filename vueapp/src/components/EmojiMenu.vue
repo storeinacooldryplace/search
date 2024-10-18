@@ -1,6 +1,6 @@
 <template>
   <div class="emoji-container" @mouseover="showMenu = true" @mouseleave="showMenu = false">
-    <img id="face" src="@/assets/search-icon.png" />
+    <img id="trigger" src="@/assets/empty-heart.svg" />
     <div class="emoji-trigger" @click="toggleMenu">
       <!-- Trigger emoji -->
     </div>
@@ -42,15 +42,16 @@ export default {
 <style>
 .emoji-container {
   position: relative;
+  padding: 10px;
 }
 
-#face {
-  width: 25px;
+#trigger {
+  width: 20px;
   /* Adjust size as needed */
   height: 25px;
   /* Adjust size as needed */
   cursor: pointer;
-  /* Show pointer on hover */
+  filter: brightness(2%)
 }
 
 .emoji-menu {

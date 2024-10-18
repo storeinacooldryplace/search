@@ -1,24 +1,45 @@
 <template>
-  <img id="title-logo" src="./assets/searchhistorybanner.png">
+  <div id="app-container">
 
-  <nav class="nav">
-    <a href="#" v-if="currentPage === 'home'" @click.prevent="currentPage = 'about'">Info</a>
-    <a href="#" v-else @click.prevent="currentPage = 'home'">Back</a>
-  </nav>
+    <aside id="left-sidebar">
+      <img id="title-logo" src="./assets/searchhistorylogo.png">
+      <div class="icon-container">
+        <a href="#" class="icon-link" @click.prevent="currentPage = 'home'">
+          <img src="./assets/home-icon.svg" alt="Home" />
+        </a>
+        <a href="#" class="icon-link" @click.prevent="currentPage = 'about'">
+          <img src="./assets/info-icon.svg" alt="Info" />
+        </a>
+      </div>
+    </aside>
 
-  <div id="user-display">
-    <h1 id="username">Justine Jung</h1>
-    <UserDisplay class="userinfo" />
-  </div>
+    <main id="main-content">
 
-  <div v-if="currentPage === 'home'">
-    <div id="app">
-      <TimelineComponent class="timeline" :history="history" />
-    </div>
-  </div>
+      <div v-if="currentPage === 'home'">
+        <header id="timeline-header">
+          <span @click="toggleView('recent')" :class="{ active: currentView === 'recent' }">Recent</span>
+          <span @click="toggleView('top')" :class="{ active: currentView === 'top' }">Top</span>
+        </header>
 
-  <div v-else-if="currentPage === 'about'">
-    <AboutPage />
+
+        <TimelineComponent class="timeline" :history="history" />
+
+      </div>
+
+      <div v-else-if="currentPage === 'about'">
+        <AboutPage />
+      </div>
+    </main>
+
+    <!-- Right sidebar -->
+    <aside id="right-sidebar">
+      <div id="trending-searches">
+        <TrendingSearches />
+      </div>
+      <div id="user-display">
+        <UserDisplay />
+      </div>
+    </aside>
   </div>
 </template>
 
@@ -29,17 +50,21 @@ import UserDisplay from './components/UserDisplay.vue';
 
 import AboutPage from './components/AboutPage.vue';
 
+import TrendingSearches from './components/TrendingSearches.vue'
+
 export default {
   name: 'App',
   components: {
     TimelineComponent,
     UserDisplay,
-    AboutPage
+    AboutPage,
+    TrendingSearches
   },
   data() {
     return {
       history: [],
       currentPage: 'home',
+      currentView: 'recent'
     };
   },
   mounted() {
@@ -55,58 +80,112 @@ export default {
         console.error('Error fetching data:', error);
       }
     },
+    toggleView(view) {
+      this.currentView = view;
+    },
   },
 };
 </script>
 
 <style>
-@font-face {
+#app-container {
+  display: grid;
+  grid-template-columns: 200px 1fr 400px;
+  /* Left Sidebar | Main Content | Right Sidebar */
+  grid-template-areas:
+    "left-sidebar main-content right-sidebar";
+  height: 100vh;
   font-family: 'Inter';
-  src: url('@/assets/fonts/Inter-VariableFont_opsz,wght.ttf') format('opentype');
-}
-
-* {
-  font-family: 'Inter';
-
-}
-
-.timeline {
-  margin-top: 50vh
 }
 
 #title-logo {
   display: block;
-  /* Make the image a block element */
-  width: 60vw;
-  /* Your specified width */
+  width: 200px;
   height: auto;
-  /* Maintain aspect ratio */
   margin: 0 auto;
-  /* Center the image horizontally */
-  /* position: fixed; */
-  position: absolute;
-  /* Fix the logo to the viewport */
-  top: 0;
-  /* Aligns it to the top of the viewport */
-  left: 50%;
-  /* Position it to the middle of the viewport */
-  transform: translateX(-50%);
-  /* Offset to center it */
-  z-index: 0;
-  /* Ensure it stays above other content */
 }
 
-#username {
-  position: absolute;
-  top: 0px;
-  right: 20px;
-  font-size: 100px
+#left-sidebar {
+  grid-area: left-sidebar;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  border-right: 0.5px solid #ccc;
+
 }
 
-.nav {
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  font-size: 40px;
+.icon-container {
+  flex-direction: column;
+  display: flex
+}
+
+.icon-container img {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  filter: sepia(20%)
+}
+
+#right-sidebar {
+  grid-area: right-sidebar;
+  padding: 20px;
+  border-left: 0.5px solid #ccc;
+  /* Border to separate from main content */
+  display: flex;
+  /* Flexbox for layout */
+  flex-direction: column;
+  /* Stack items vertically */
+  gap: 30px;
+  /* Space between items */
+}
+
+
+
+#right-sidebar>div {
+  min-height: 50px;
+  /* Ensures a minimum height for each item */
+}
+
+#user-display {
+  background-color: bisque;
+  /* Background color for visibility */
+}
+
+.icon-link {
+  width: 20px
+}
+
+#timeline-header {
+  display: flex;
+  justify-content: space-around;
+  /* Evenly space the links */
+  padding: 50px 0 0 0;
+  /* Add padding for visual spacing */
+  border-bottom: 1px solid #ccc;
+  /* Optional: Add a bottom border */
+  font-size: 20px;
+}
+
+#timeline-header span {
+  cursor: pointer;
+  color: grey;
+}
+
+#timeline-header span.active {
+  color: black;
+  /* Color for the selected view */
+  font-weight: bold;
+  /* Optionally make it bold */
+}
+
+#timeline-header span.active::after {
+  content: '';
+  display: block;
+  height: 4px;
+  background-color: rgb(132, 183, 131);
+  bottom: -20px;
+  border-radius: 2px;
 }
 </style>

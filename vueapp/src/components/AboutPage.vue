@@ -17,12 +17,12 @@ export default {
 
 <style scoped>
 #about {
-  margin-top: 600px;
+  margin-top: 60px;
   margin-left: 20px
 }
 
 p {
-  font-size: 50px;
-  width: 40%;
+  font-size: 40px;
+  width: 70%;
 }
 </style>
