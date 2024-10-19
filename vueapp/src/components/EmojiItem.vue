@@ -34,7 +34,17 @@ export default {
 <style>
 .emoji-item {
   cursor: pointer;
+  display: flex;
+  /* Use flexbox for layout */
+  align-items: center;
+  /* Center items vertically */
+  cursor: pointer;
+  /* Change cursor on hover */
+  gap: 5px;
 }
 
-
+.emoji {
+  font-size: 24px;
+  /* Adjust size of the emoji as needed */
+}
 </style>

@@ -2,9 +2,9 @@
   <li class="list-item">
     <EmojiMenu />
     <img id="search-icon" src="@/assets/magnifying.svg">
-
     <a :href="url" class="linked-title">{{ title }}</a>
     <span class="time">{{ formattedTime }}</span>
+
   </li>
 </template>
 
@@ -67,6 +67,7 @@ a {
 }
 
 .time {
-  margin: 0
+  margin: 0;
+  color: rgb(152, 151, 151);
 }
 </style>
