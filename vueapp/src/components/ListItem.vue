@@ -1,8 +1,10 @@
 <template>
   <li class="list-item">
     <EmojiMenu />
-    <span class="time">{{ formattedTime }}</span>
+    <img id="search-icon" src="@/assets/magnifying.svg">
+
     <a :href="url" class="linked-title">{{ title }}</a>
+    <span class="time">{{ formattedTime }}</span>
   </li>
 </template>
 
@@ -48,10 +50,16 @@ li {
   border-bottom: 0.5px solid #ececec;
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .linked-title {
   padding: 10px
+}
+
+#search-icon {
+  width: 15px;
+  height: 15px
 }
 
 a {

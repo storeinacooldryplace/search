@@ -114,7 +114,6 @@ export default {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: flex-end;
   border-right: 0.5px solid #e6e5e5;
 }
@@ -123,15 +122,14 @@ export default {
   flex-direction: column;
   display: flex;
   margin-top: 90px;
-  gap: 20px;
+  gap: 10px;
   margin-right: 15px
 }
 
 .icon-container img {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
-  filter: sepia(20%)
 }
 
 #right-sidebar {
@@ -147,20 +145,34 @@ export default {
   /* Space between items */
 }
 
-
-
 #right-sidebar>div {
   min-height: 50px;
   /* Ensures a minimum height for each item */
 }
 
 #user-display {
-  background-color: rgb(213, 212, 211);
+  background-color: rgb(238, 237, 235);
   /* Background color for visibility */
 }
 
 .icon-link {
-  width: 20px
+  display: flex;
+  /* Ensure the link is a flex container */
+  align-items: center;
+  /* Center items vertically */
+  justify-content: center;
+  /* Center items horizontally */
+  width: 50px;
+  /* Circle width */
+  height: 50px;
+  /* Circle height */
+  border-radius: 50%;
+  /* Make it circular */
+  transition: background-color 0.2s ease;
+}
+
+.icon-link:hover {
+  background-color: rgba(128, 128, 128, 0.2);
 }
 
 #main-content {
@@ -200,5 +212,11 @@ export default {
   background-color: rgb(23, 170, 20);
   bottom: -20px;
   border-radius: 5px;
+}
+
+#timeline-header span:hover {
+  background-color: rgba(128, 128, 128, 0.1);
+  border-radius: 80%;
+  /* Light grey highlight on hover */
 }
 </style>
