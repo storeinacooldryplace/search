@@ -1,8 +1,7 @@
 <template>
   <div id="app-container">
-
     <aside id="left-sidebar">
-      <img id="title-logo" src="./assets/search-logo.png">
+      <img id="title-logo" src="./assets/search-logo.png" />
       <div class="icon-container">
         <div class="icon-link" @click.prevent="currentPage = 'home'">
           <img src="./assets/home-icon.svg" alt="Home" />
@@ -16,18 +15,13 @@
     </aside>
 
     <main id="main-content">
-
       <div v-if="currentPage === 'home'">
         <header id="timeline-header">
           <span @click="toggleView('top')" :class="{ active: currentView === 'top' }">Top</span>
-
           <span @click="toggleView('recent')" :class="{ active: currentView === 'recent' }">Recent</span>
-
         </header>
 
-
-        <TimelineComponent class="timeline" :history="history" />
-
+        <TimelineComponent class="timeline" :history="mergedHistory" @vote="handleVote" />
       </div>
 
       <div v-else-if="currentPage === 'about'">
@@ -35,7 +29,6 @@
       </div>
     </main>
 
-    <!-- Right sidebar -->
     <aside id="right-sidebar">
       <div id="trending-searches">
         <TrendingSearches />
@@ -49,12 +42,11 @@
 
 <script>
 import TimelineComponent from './components/TimelineComponent.vue';
-
 import UserDisplay from './components/UserDisplay.vue';
-
 import AboutPage from './components/AboutPage.vue';
-
-import TrendingSearches from './components/TrendingSearches.vue'
+import TrendingSearches from './components/TrendingSearches.vue';
+import { db } from '@/firebase'; // Import your Firebase configuration
+import { setDoc, increment, doc, getDoc } from 'firebase/firestore';
 
 export default {
   name: 'App',
@@ -62,42 +54,74 @@ export default {
     TimelineComponent,
     UserDisplay,
     AboutPage,
-    TrendingSearches
+    TrendingSearches,
   },
   data() {
     return {
       history: [],
       currentPage: 'home',
-      currentView: 'recent'
+      currentView: 'recent',
     };
   },
+  computed: {
+    mergedHistory() {
+      return this.history.map(entry => ({
+        ...entry,
+        voteCount: entry.voteCount || 0 // Default vote count to 0
+      }));
+    },
+  },
   mounted() {
-    this.fetchData(); // Fetch data on component mount
+    this.fetchData(); // Fetch API data on component mount
   },
   methods: {
     async fetchData() {
       try {
         const response = await fetch('http://165.227.86.130:1000/api'); // Replace with your API endpoint
         const data = await response.json();
-        this.history = data; // Assuming data is directly assigned to history
+        this.history = data; // Assign data to history
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     },
+
     toggleView(view) {
       this.currentView = view;
+    },
+
+    async handleVote(entryId) {
+      // Get the current vote count for the entry from Firestore
+      const entryRef = doc(db, 'entries', entryId);
+      const entrySnapshot = await getDoc(entryRef);
+
+      if (entrySnapshot.exists()) {
+        // If document exists, increment the vote count
+        await setDoc(entryRef, {
+          voteCount: increment(1) // Increment vote count
+        }, { merge: true });
+      } else {
+        // If document doesn't exist, create it with an initial vote count of 1
+        await setDoc(entryRef, {
+          voteCount: 1 // Set initial vote count
+        });
+      }
+
+      // Update local state for immediate feedback
+      const entry = this.history.find(e => e.id === entryId);
+      if (entry) {
+        entry.voteCount = entry.voteCount ? entry.voteCount + 1 : 1; // Update local vote count
+      }
     },
   },
 };
 </script>
 
 <style>
+/* Your existing styles remain unchanged */
 #app-container {
   display: grid;
   grid-template-columns: 200px 800px 400px;
-  /* Left Sidebar | Main Content | Right Sidebar */
-  grid-template-areas:
-    "left-sidebar main-content right-sidebar";
+  grid-template-areas: "left-sidebar main-content right-sidebar";
   height: 100vh;
   font-family: 'Inter';
   margin: 0 auto;
@@ -108,7 +132,6 @@ export default {
   display: block;
   width: 100px;
   height: auto;
-
 }
 
 #left-sidebar {
@@ -139,23 +162,17 @@ export default {
   grid-area: right-sidebar;
   padding: 20px;
   border-left: 0.5px solid #e6e5e5;
-  /* Border to separate from main content */
   display: flex;
-  /* Flexbox for layout */
   flex-direction: column;
-  /* Stack items vertically */
   gap: 30px;
-  /* Space between items */
 }
 
 #right-sidebar>div {
   min-height: 50px;
-  /* Ensures a minimum height for each item */
 }
 
 #user-display {
   background-color: rgb(238, 237, 235);
-  /* Background color for visibility */
 }
 
 .icon-link {
@@ -167,36 +184,25 @@ export default {
   border-radius: 50%;
   transition: background-color 0.2s ease;
   gap: 10px;
-  height: auto;
   padding: 10px 15px;
-  border-radius: 30px;
 }
 
 .icon-link:hover {
   background-color: rgba(128, 128, 128, 0.2);
-  border-radius: 30px;
 }
 
 .icon-label {
   display: inline-block;
 }
 
-/* On larger screens, show the text and adjust hover effect */
-
-#main-content {
-  /* Optional: set a max-width for main content */
-  /* Center main content within its grid area */
-}
+#main-content {}
 
 #timeline-header {
   display: flex;
   justify-content: center;
   gap: 220px;
-  /* Evenly space the links */
   padding: 50px 0 0 0;
-  /* Add padding for visual spacing */
   border-bottom: 1px solid #f7f6f6;
-  /* Optional: Add a bottom border */
   font-size: 20px;
 }
 
@@ -204,17 +210,12 @@ export default {
   cursor: pointer;
   color: grey;
   font-size: 30px;
-  width: auto;
-  height: 30px;
   padding-left: 10px;
   padding-right: 10px;
 }
 
 #timeline-header span.active {
   color: black;
-  /* Color for the selected view */
-
-  /* Optionally make it bold */
 }
 
 #timeline-header span.active::after {
@@ -228,7 +229,5 @@ export default {
 
 #timeline-header span:hover {
   background-color: rgba(198, 197, 197, 0.1);
-  border-radius: 30px;
-  /* Light grey highlight on hover */
 }
 </style>

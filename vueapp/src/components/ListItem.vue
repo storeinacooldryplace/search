@@ -10,7 +10,7 @@
 
     <!-- Move EmojiMenu below search-info -->
     <div id="search-react">
-      <EmojiMenu />
+      <EmojiMenu :title="title" />
     </div>
 
   </li>
