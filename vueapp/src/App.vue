@@ -4,12 +4,14 @@
     <aside id="left-sidebar">
       <img id="title-logo" src="./assets/search-logo.png">
       <div class="icon-container">
-        <a href="#" class="icon-link" @click.prevent="currentPage = 'home'">
+        <div class="icon-link" @click.prevent="currentPage = 'home'">
           <img src="./assets/home-icon.svg" alt="Home" />
-        </a>
-        <a href="#" class="icon-link" @click.prevent="currentPage = 'about'">
-          <img src="./assets/info-icon.svg" alt="Info" />
-        </a>
+          <span class="icon-label">Home</span>
+        </div>
+        <div class="icon-link" @click.prevent="currentPage = 'about'">
+          <img src="./assets/profile.webp" alt="Info" />
+          <span class="icon-label">Info</span>
+        </div>
       </div>
     </aside>
 
@@ -123,7 +125,8 @@ export default {
   display: flex;
   margin-top: 90px;
   gap: 10px;
-  margin-right: 15px
+  margin-right: 15px;
+  align-items: flex-start;
 }
 
 .icon-container img {
@@ -157,23 +160,28 @@ export default {
 
 .icon-link {
   display: flex;
-  /* Ensure the link is a flex container */
   align-items: center;
-  /* Center items vertically */
-  justify-content: center;
-  /* Center items horizontally */
-  width: 50px;
-  /* Circle width */
+  justify-content: flex-start;
+  width: auto;
   height: 50px;
-  /* Circle height */
   border-radius: 50%;
-  /* Make it circular */
   transition: background-color 0.2s ease;
+  gap: 10px;
+  height: auto;
+  padding: 10px 15px;
+  border-radius: 30px;
 }
 
 .icon-link:hover {
   background-color: rgba(128, 128, 128, 0.2);
+  border-radius: 30px;
 }
+
+.icon-label {
+  display: inline-block;
+}
+
+/* On larger screens, show the text and adjust hover effect */
 
 #main-content {
   /* Optional: set a max-width for main content */
