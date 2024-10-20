@@ -1,18 +1,6 @@
 <template>
   <div id="app-container">
-    <aside id="left-sidebar">
-      <img id="title-logo" src="./assets/search-logo.png" />
-      <div class="icon-container">
-        <div class="icon-link" @click.prevent="currentPage = 'home'">
-          <img src="./assets/home-icon.svg" alt="Home" />
-          <span class="icon-label">Home</span>
-        </div>
-        <div class="icon-link" @click.prevent="currentPage = 'about'">
-          <img src="./assets/profile.webp" alt="Info" />
-          <span class="icon-label">Info</span>
-        </div>
-      </div>
-    </aside>
+    <LeftSidebar @changePage="currentPage = $event" />
 
     <main id="main-content">
       <div v-if="currentPage === 'home'">
@@ -29,32 +17,25 @@
       </div>
     </main>
 
-    <aside id="right-sidebar">
-      <div id="trending-searches">
-        <TrendingSearches />
-      </div>
-      <div id="user-display">
-        <UserDisplay />
-      </div>
-    </aside>
+    <RightSidebar />
   </div>
 </template>
 
 <script>
 import TimelineComponent from './components/TimelineComponent.vue';
-import UserDisplay from './components/UserDisplay.vue';
 import AboutPage from './components/AboutPage.vue';
-import TrendingSearches from './components/TrendingSearches.vue';
 import { db } from '@/firebase'; // Import your Firebase configuration
 import { setDoc, increment, doc, getDoc } from 'firebase/firestore';
+import LeftSidebar from './components/LeftSidebar.vue';
+import RightSidebar from './components/RightSidebar.vue';
 
 export default {
   name: 'App',
   components: {
     TimelineComponent,
-    UserDisplay,
+    LeftSidebar,
+    RightSidebar,
     AboutPage,
-    TrendingSearches,
   },
   data() {
     return {
@@ -132,67 +113,6 @@ export default {
   display: block;
   width: 100px;
   height: auto;
-}
-
-#left-sidebar {
-  grid-area: left-sidebar;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  border-right: 0.5px solid #e6e5e5;
-}
-
-.icon-container {
-  flex-direction: column;
-  display: flex;
-  margin-top: 90px;
-  gap: 10px;
-  margin-right: 15px;
-  align-items: flex-start;
-}
-
-.icon-container img {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-}
-
-#right-sidebar {
-  grid-area: right-sidebar;
-  padding: 20px;
-  border-left: 0.5px solid #e6e5e5;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-#right-sidebar>div {
-  min-height: 50px;
-}
-
-#user-display {
-  background-color: rgb(238, 237, 235);
-}
-
-.icon-link {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: auto;
-  height: 50px;
-  border-radius: 50%;
-  transition: background-color 0.2s ease;
-  gap: 10px;
-  padding: 10px 15px;
-}
-
-.icon-link:hover {
-  background-color: rgba(128, 128, 128, 0.2);
-}
-
-.icon-label {
-  display: inline-block;
 }
 
 #main-content {}
