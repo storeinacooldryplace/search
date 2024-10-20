@@ -204,6 +204,10 @@ export default {
   cursor: pointer;
   color: grey;
   font-size: 30px;
+  width: auto;
+  height: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #timeline-header span.active {
@@ -223,8 +227,8 @@ export default {
 }
 
 #timeline-header span:hover {
-  background-color: rgba(128, 128, 128, 0.1);
-  border-radius: 80%;
+  background-color: rgba(198, 197, 197, 0.1);
+  border-radius: 30px;
   /* Light grey highlight on hover */
 }
 </style>
