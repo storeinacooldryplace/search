@@ -1,13 +1,8 @@
 <template>
-  <div class="emoji-container" @mouseover="showMenu = true" @mouseleave="showMenu = false">
-    <img id="trigger" src="@/assets/magnifying.svg" />
-    <div class="emoji-trigger" @click="toggleMenu">
-
-
-    </div>
-    <div v-if="showMenu" class="emoji-menu">
-      <EmojiItem v-for="(emoji, index) in emojis" :key="index" :emoji="emoji.symbol" :count="emoji.count"
-        @toggleCount="toggleCount(index)" />
+  <div class="emoji-container">
+    <div class="emoji-icons">
+      <EmojiItem v-for="(icon, index) in icons" :key="index" :icon="icon.src" :count="icon.count"
+        :hoverColor="icon.hoverColor" @toggleCount="toggleCount(index)" />
     </div>
   </div>
 </template>
@@ -21,21 +16,15 @@ export default {
   },
   data() {
     return {
-      showMenu: false,
-      emojis: [
-        { symbol: '🤍', count: 0 }, // Example emojis
-        { symbol: '❓', count: 0 },
-        { symbol: '❗', count: 0 },
-        { symbol: '😢', count: 0 },
-      ],
+      icons: [
+        { src: require('@/assets/empty-heart.svg'), count: 0, hoverColor: 'rgba(255, 0, 0, 0.3)' }, // Replace with your icon file paths
+        { src: require('@/assets/question.png'), count: 0, hoverColor: 'rgba(0, 255, 0, 0.3)' },
+        { src: require('@/assets/exclamation.png'), count: 0, hoverColor: 'rgba(0, 0, 255, 0.3)' }],
     };
   },
   methods: {
-    toggleMenu() {
-      this.showMenu = !this.showMenu;
-    },
     toggleCount(index) {
-      this.emojis[index].count = this.emojis[index].count === 0 ? 1 : 0;
+      this.icons[index].count = this.icons[index].count === 0 ? 1 : 0;
     },
   },
 };
@@ -43,38 +32,46 @@ export default {
 
 <style>
 .emoji-container {
-  position: relative;
-  padding: 10px;
-}
-
-#trigger {
-  width: 20px;
-  /* Adjust size as needed */
-  height: 20px;
-  /* Adjust size as needed */
-  cursor: pointer;
-  filter: brightness(2%)
-}
-
-.emoji-menu {
   display: flex;
-  flex-direction: row;
-  position: absolute;
-  transform: translateX(-50%);
-  background-color: #f2f1f1;
-  align-items: center;
   padding: 10px;
-  padding-left: 10px;
-  margin-right: 10px;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+}
+
+.emoji-icons {
+  display: flex;
   gap: 10px;
-  font-family: 'Helvetica';
+  /* Space between icons */
 }
 
-.menu-icons .symbol {
-  cursor: pointer;
+.emoji-icon {
+  position: relative;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.emoji-icon:hover {
+  background-color: rgba(100, 100, 255, 0.2);
+  border-radius: 50%;
+}
+
+.icon {
+  width: 15px;
+  /* Adjust size as needed */
+  height: 15px;
+  /* Adjust size as needed */
+}
+
+.count {
+  position: absolute;
+  bottom: -15px;
+  /* Adjust position as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  /* Adjust font size as needed */
+  color: #333;
+  /* Change color as needed */
 }
 </style>

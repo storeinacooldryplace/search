@@ -1,14 +1,15 @@
 <template>
-  <div class="emoji-item" @click="toggleCount">
-    <span>{{ emoji }}</span>
-    <span v-if="countVisible">{{ count }}</span>
+  <div class="emoji-icon" @click="toggleCount" :style="{ backgroundColor: isHovered ? hoverColor : 'transparent' }"
+    @mouseenter="isHovered = true" @mouseleave="isHovered = false">
+    <img :src="icon" class="icon" />
+    <span class="count">{{ count }}</span>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    emoji: {
+    icon: {
       type: String,
       required: true,
     },
@@ -16,35 +17,51 @@ export default {
       type: Number,
       required: true,
     },
+    hoverColor: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
-      countVisible: false,
+      isHovered: false, // Track hover state
     };
   },
   methods: {
     toggleCount() {
-      this.countVisible = !this.countVisible; // Toggle visibility of the count
-      this.$emit('toggleCount'); // Emit event to update count in EmojiMenu
+      this.$emit('toggleCount');
     },
   },
 };
 </script>
 
 <style>
-.emoji-item {
-  cursor: pointer;
+.emoji-icon {
+  position: relative;
   display: flex;
-  /* Use flexbox for layout */
   align-items: center;
-  /* Center items vertically */
+  justify-content: center;
   cursor: pointer;
-  /* Change cursor on hover */
-  gap: 5px;
+  transition: background-color 0.3s;
+  border-radius: 50%;
+  /* Optional for rounded corners */
 }
 
-.emoji {
-  font-size: 24px;
-  /* Adjust size of the emoji as needed */
+.icon {
+  width: 30px;
+  /* Adjust size as needed */
+  height: 30px;
+  /* Adjust size as needed */
 }
-</style>
+
+.count {
+  position: absolute;
+  bottom: -15px;
+  /* Adjust position as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  /* Adjust font size as needed */
+  color: #333;
+  /* Change color as needed */
+}</style>

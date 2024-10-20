@@ -1,9 +1,17 @@
 <template>
   <li class="list-item">
-    <EmojiMenu />
-    <img id="search-icon" src="@/assets/magnifying.svg">
-    <a :href="url" class="linked-title">{{ title }}</a>
-    <span class="time">{{ formattedTime }}</span>
+
+
+    <div id="search-info">
+      <img id="search-icon" src="@/assets/magnifying.svg">
+      <a :href="url" class="linked-title">{{ title }}</a>
+      <span class="time">{{ formattedTime }}</span>
+    </div>
+
+    <!-- Move EmojiMenu below search-info -->
+    <div id="search-react">
+      <EmojiMenu />
+    </div>
 
   </li>
 </template>
@@ -49,8 +57,9 @@ li {
   margin-bottom: 0px;
   border-bottom: 0.5px solid #ececec;
   display: flex;
-  align-items: center;
+  align-items: left;
   gap: 10px;
+  flex-direction: column;
 }
 
 .linked-title {
