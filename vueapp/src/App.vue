@@ -9,7 +9,7 @@
           <span @click="toggleView('recent')" :class="{ active: currentView === 'recent' }">Recent</span>
         </header>
 
-        <TimelineComponent class="timeline" :history="mergedHistory" @vote="handleVote" />
+        <TimelineComponent class="timeline" :history="mergedHistory" />
       </div>
 
       <div v-else-if="currentPage === 'about'">
@@ -25,7 +25,7 @@
 import TimelineComponent from './components/TimelineComponent.vue';
 import AboutPage from './components/AboutPage.vue';
 import { db } from '@/firebase'; // Import your Firebase configuration
-import { setDoc, increment, doc, getDoc } from 'firebase/firestore';
+import { addDoc, doc, getDoc, collection } from 'firebase/firestore';
 import LeftSidebar from './components/LeftSidebar.vue';
 import RightSidebar from './components/RightSidebar.vue';
 
@@ -47,8 +47,7 @@ export default {
   computed: {
     mergedHistory() {
       return this.history.map(entry => ({
-        ...entry,
-        voteCount: entry.voteCount || 0 // Default vote count to 0
+        ...entry // Default vote count to 0
       }));
     },
   },
@@ -61,6 +60,30 @@ export default {
         const response = await fetch('http://165.227.86.130:1000/api'); // Replace with your API endpoint
         const data = await response.json();
         this.history = data; // Assign data to history
+
+        for (const entry of data) {
+          const postRef = doc(db, 'posts', entry.postId); // Using postId for Firestore document reference
+
+          const docSnap = await getDoc(postRef); // Check if the document exists
+
+          if (!docSnap.exists()) {
+            const newDocData = {
+              emojiReactions: {
+                heart: 0,
+                question: 0,
+                surprise: 0,
+              },
+              content: entry.content, // Assuming 'entry.content' is what you want to store
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            };
+
+            // Create a new document and get the generated postId
+            const docRef = await addDoc(collection(db, 'posts'), newDocData);
+            entry.postId = docRef.id; // Store the ID of the newly created document in the entry
+          }
+        }
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -70,29 +93,7 @@ export default {
       this.currentView = view;
     },
 
-    async handleVote(entryId) {
-      // Get the current vote count for the entry from Firestore
-      const entryRef = doc(db, 'entries', entryId);
-      const entrySnapshot = await getDoc(entryRef);
 
-      if (entrySnapshot.exists()) {
-        // If document exists, increment the vote count
-        await setDoc(entryRef, {
-          voteCount: increment(1) // Increment vote count
-        }, { merge: true });
-      } else {
-        // If document doesn't exist, create it with an initial vote count of 1
-        await setDoc(entryRef, {
-          voteCount: 1 // Set initial vote count
-        });
-      }
-
-      // Update local state for immediate feedback
-      const entry = this.history.find(e => e.id === entryId);
-      if (entry) {
-        entry.voteCount = entry.voteCount ? entry.voteCount + 1 : 1; // Update local vote count
-      }
-    },
   },
 };
 </script>

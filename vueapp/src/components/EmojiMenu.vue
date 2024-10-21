@@ -10,7 +10,7 @@
 <script>
 import EmojiItem from './EmojiItem.vue';
 import { db } from '@/firebase';
-import { doc, updateDoc, increment, collection, onSnapshot, addDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, increment, onSnapshot, getDoc } from 'firebase/firestore';
 
 export default {
   components: {
@@ -20,6 +20,10 @@ export default {
     title: {
       type: String,
       required: true,
+    },
+    postId: {
+      type: String,
+      required: true, // Expecting postId to be passed as a prop
     },
   },
   data() {
@@ -47,33 +51,12 @@ export default {
           emojiType: 'surprise',
         },
       ],
-      postId: null,
     };
   },
   mounted() {
-    this.initializePost();
+    this.setupListener();
   },
   methods: {
-    async initializePost() {
-      if (!this.postId) {
-        const newDocData = {
-          emojiReactions: {
-            heart: 0,
-            question: 0,
-            surprise: 0,
-          },
-          content: this.title,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        };
-
-        const docRef = await addDoc(collection(db, 'posts'), newDocData);
-        this.postId = docRef.id;
-
-        // Set up real-time listener
-        this.setupListener();
-      }
-    },
     setupListener() {
       const postRef = doc(db, 'posts', this.postId);
 
@@ -95,7 +78,7 @@ export default {
       const postRef = doc(db, 'posts', this.postId);
 
       // Fetch the current state of the document to ensure you're in sync with Firestore
-      const postDoc = await getDoc(postRef); // Use getDoc instead of postRef.get()
+      const postDoc = await getDoc(postRef);
       const emojiReactions = postDoc.data().emojiReactions;
 
       if (!icon.voted) {
@@ -124,7 +107,6 @@ export default {
 .emoji-container {
   display: flex;
   /* padding: 10px; */
-  /* Set flex direction to column if needed, depending on your layout */
 }
 
 .emoji-icons {
