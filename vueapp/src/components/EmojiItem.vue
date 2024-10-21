@@ -1,7 +1,8 @@
 <template>
-  <div class="emoji-icon" @click="toggleCount" :style="{ backgroundColor: isHovered ? hoverColor : 'transparent' }"
-    @mouseenter="isHovered = true" @mouseleave="isHovered = false">
-    <img :src="icon" class="icon" />
+  <div class="emoji-icon">
+    <img :src="icon" class="icon" @click="toggleCount"
+      :style="{ backgroundColor: voted ? hoverColor : (isHovered ? hoverColor : 'transparent') }"
+      @mouseenter="isHovered = true" @mouseleave="isHovered = false" />
     <span class="count">{{ count }}</span>
   </div>
 </template>
@@ -21,10 +22,14 @@ export default {
       type: String,
       required: true,
     },
+    voted: {
+      type: Boolean,
+      required: true,
+    },
   },
   data() {
     return {
-      isHovered: false, // Track hover state
+      isHovered: false,
     };
   },
   methods: {
@@ -37,31 +42,25 @@ export default {
 
 <style>
 .emoji-icon {
-  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 5px;
+  flex-direction: row;
   cursor: pointer;
   transition: background-color 0.3s;
-  border-radius: 50%;
-  /* Optional for rounded corners */
 }
 
+.emoji-icon:hover {}
+
 .icon {
-  width: 30px;
-  /* Adjust size as needed */
-  height: 30px;
-  /* Adjust size as needed */
+  width: 14px;
+  height: 14px;
+  padding: 5px;
+  border-radius: 50%;
 }
 
 .count {
-  position: absolute;
-  bottom: -15px;
-  /* Adjust position as needed */
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  /* Adjust font size as needed */
-  color: #333;
-  /* Change color as needed */
-}</style>
+  font-size: 14px;
+  color: #717070;
+}
+</style>

@@ -53,12 +53,12 @@ ul {
 }
 
 li {
-  padding: 0px;
+  padding: 10px;
   margin-bottom: 0px;
   border-bottom: 0.5px solid #ececec;
   display: flex;
   align-items: left;
-  gap: 10px;
+  gap: 5px;
   flex-direction: column;
 }
 

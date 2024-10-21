@@ -10,7 +10,7 @@
 <script>
 import EmojiItem from './EmojiItem.vue';
 import { db } from '@/firebase';
-import { doc, addDoc, updateDoc, increment, collection } from 'firebase/firestore';
+import { doc, updateDoc, increment, collection, onSnapshot, addDoc } from 'firebase/firestore';
 
 export default {
   components: {
@@ -29,36 +29,38 @@ export default {
           src: require('@/assets/empty-heart.svg'),
           count: 0,
           voted: false,
-          hoverColor: 'rgba(255, 0, 0, 0.3)',
+          hoverColor: 'rgba(255, 0, 0, 0.2)',
           emojiType: 'heart',
         },
         {
           src: require('@/assets/question.png'),
           count: 0,
           voted: false,
-          hoverColor: 'rgba(0, 255, 0, 0.3)',
+          hoverColor: 'rgba(0, 255, 0, 0.2)',
           emojiType: 'question',
         },
         {
           src: require('@/assets/exclamation.png'),
           count: 0,
           voted: false,
-          hoverColor: 'rgba(0, 0, 255, 0.3)',
+          hoverColor: 'rgba(0, 0, 255, 0.2)',
           emojiType: 'surprise',
         },
       ],
       postId: null,
     };
   },
+  mounted() {
+    this.initializePost();
+  },
   methods: {
-    async toggleCount(index) {
-      const icon = this.icons[index];
-
-      // If the postId is not defined, create a new document
+    async initializePost() {
       if (!this.postId) {
         const newDocData = {
           emojiReactions: {
-            [icon.emojiType]: 1, // Set initial count for the first emoji
+            heart: 0,
+            question: 0,
+            surprise: 0,
           },
           content: this.title,
           createdAt: new Date(),
@@ -66,78 +68,65 @@ export default {
         };
 
         const docRef = await addDoc(collection(db, 'posts'), newDocData);
-        console.log("Document written with ID: ", docRef.id);
         this.postId = docRef.id;
 
-        // Update the local state for the icon
+        // Set up real-time listener
+        this.setupListener();
+      }
+    },
+    setupListener() {
+      const postRef = doc(db, 'posts', this.postId);
+
+      onSnapshot(postRef, (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          this.updateEmojiCounts(data.emojiReactions);
+        }
+      });
+    },
+    updateEmojiCounts(emojiReactions) {
+      // Update emoji counts from Firestore
+      this.icons.forEach((icon) => {
+        icon.count = emojiReactions[icon.emojiType] || 0;
+      });
+    },
+    async toggleCount(index) {
+      const icon = this.icons[index];
+      const postRef = doc(db, 'posts', this.postId);
+
+      if (!icon.voted) {
+        await updateDoc(postRef, {
+          [`emojiReactions.${icon.emojiType}`]: increment(1),
+        });
         icon.count += 1;
         icon.voted = true;
-
       } else {
-        const postRef = doc(db, 'posts', this.postId);
-
-        if (!icon.voted) {
-          // If the icon was not voted on before, increment the count
-          await updateDoc(postRef, {
-            [`emojiReactions.${icon.emojiType}`]: increment(1),
-          });
-
-          // Update the local state for the icon
-          icon.count += 1;
-          icon.voted = true;
-
-        } else {
-          // If the icon was already voted on, decrement the count
-          await updateDoc(postRef, {
-            [`emojiReactions.${icon.emojiType}`]: increment(-1),
-          });
-
-          // Update the local state for the icon
-          icon.count -= 1;
-          icon.voted = false;
-        }
+        await updateDoc(postRef, {
+          [`emojiReactions.${icon.emojiType}`]: increment(-1),
+        });
+        icon.count -= 1;
+        icon.voted = false;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>
 .emoji-container {
   display: flex;
-  padding: 10px;
+  /* padding: 10px; */
+  /* Set flex direction to column if needed, depending on your layout */
 }
 
 .emoji-icons {
   display: flex;
-  gap: 10px;
-}
-
-.emoji-icon {
-  position: relative;
-  display: flex;
+  gap: 100px;
+  /* Space between icons */
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.emoji-icon:hover {
-  background-color: rgba(100, 100, 255, 0.2);
-  border-radius: 50%;
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
-}
-
-.count {
-  position: absolute;
-  bottom: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  color: #333;
+  /* Align items vertically centered */
+  justify-content: space-around;
+  /* Align items to the start (left) */
+  width: 100%;
 }
 </style>

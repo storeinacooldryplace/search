@@ -50,18 +50,18 @@ export default {
   align-items: center;
   justify-content: flex-start;
   width: auto;
-  height: 50px;
-  border-radius: 50%;
+  border-radius: 50px;
   transition: background-color 0.2s ease;
   gap: 10px;
   padding: 10px 15px;
 }
 
 .icon-link:hover {
-  background-color: rgba(128, 128, 128, 0.2);
+  background-color: rgba(171, 170, 170, 0.2);
 }
 
 .icon-label {
   display: inline-block;
+  font-size: 20px;
 }
 </style>

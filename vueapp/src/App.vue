@@ -149,5 +149,6 @@ export default {
 
 #timeline-header span:hover {
   background-color: rgba(198, 197, 197, 0.1);
+  border-radius: 50px;
 }
 </style>
