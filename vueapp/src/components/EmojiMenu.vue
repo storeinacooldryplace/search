@@ -10,7 +10,7 @@
 <script>
 import EmojiItem from './EmojiItem.vue';
 import { db } from '@/firebase';
-import { doc, updateDoc, increment, collection, onSnapshot, addDoc } from 'firebase/firestore';
+import { doc, updateDoc, increment, collection, onSnapshot, addDoc, getDoc } from 'firebase/firestore';
 
 export default {
   components: {
@@ -94,20 +94,28 @@ export default {
       const icon = this.icons[index];
       const postRef = doc(db, 'posts', this.postId);
 
+      // Fetch the current state of the document to ensure you're in sync with Firestore
+      const postDoc = await getDoc(postRef); // Use getDoc instead of postRef.get()
+      const emojiReactions = postDoc.data().emojiReactions;
+
       if (!icon.voted) {
+        // Increment the Firestore count
         await updateDoc(postRef, {
           [`emojiReactions.${icon.emojiType}`]: increment(1),
         });
-        icon.count += 1;
+        // Update the local count and voted state
+        icon.count = emojiReactions[icon.emojiType] + 1;
         icon.voted = true;
       } else {
+        // Decrement the Firestore count
         await updateDoc(postRef, {
           [`emojiReactions.${icon.emojiType}`]: increment(-1),
         });
-        icon.count -= 1;
+        // Update the local count and voted state
+        icon.count = emojiReactions[icon.emojiType] - 1;
         icon.voted = false;
       }
-    },
+    }
   },
 };
 </script>

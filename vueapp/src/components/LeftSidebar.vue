@@ -34,7 +34,7 @@ export default {
   flex-direction: column;
   display: flex;
   margin-top: 90px;
-  gap: 10px;
+  gap: 20px;
   margin-right: 15px;
   align-items: flex-start;
 }
