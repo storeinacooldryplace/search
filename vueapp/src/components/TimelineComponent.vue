@@ -23,6 +23,8 @@ export default {
       const dateWise = [];
       let lastIndex = 0;
 
+      console.log("before TL works. this is TL's history: ", this.history)
+
       for (let i = 0; i < this.history.length; i++) {
         const currentItem = this.history[i];
         if (i === 0) {
@@ -38,6 +40,7 @@ export default {
           }
         }
       }
+      console.log("after the restructure, here's TLs dateWise: ", dateWise)
       return dateWise;
     },
   },

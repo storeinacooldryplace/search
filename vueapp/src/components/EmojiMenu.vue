@@ -10,7 +10,9 @@
 <script>
 import EmojiItem from './EmojiItem.vue';
 import { db } from '@/firebase';
-import { doc, updateDoc, increment, onSnapshot, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, increment, onSnapshot } from 'firebase/firestore';
+import { serverTimestamp } from "firebase/firestore";
+
 
 export default {
   components: {
@@ -23,7 +25,8 @@ export default {
     },
     postId: {
       type: String,
-      required: true, // Expecting postId to be passed as a prop
+      required: true,
+      default: "1",
     },
   },
   data() {
@@ -63,6 +66,7 @@ export default {
       onSnapshot(postRef, (doc) => {
         if (doc.exists()) {
           const data = doc.data();
+          console.log("Real-time update from Firestore: ", data); // Log real-time updates
           this.updateEmojiCounts(data.emojiReactions);
         }
       });
@@ -70,36 +74,32 @@ export default {
     updateEmojiCounts(emojiReactions) {
       // Update emoji counts from Firestore
       this.icons.forEach((icon) => {
-        icon.count = emojiReactions[icon.emojiType] || 0;
+        icon.count = emojiReactions[icon.emojiType] || 0; // Ensure count defaults to 0 if undefined
       });
     },
     async toggleCount(index) {
       const icon = this.icons[index];
       const postRef = doc(db, 'posts', this.postId);
 
-      // Fetch the current state of the document to ensure you're in sync with Firestore
-      const postDoc = await getDoc(postRef);
-      const emojiReactions = postDoc.data().emojiReactions;
+      try {
+        const incrementValue = icon.voted ? -1 : 1; // Increment if not voted, decrement if voted
 
-      if (!icon.voted) {
-        // Increment the Firestore count
+        // Update Firestore with the new emoji count and set the updatedAt timestamp
         await updateDoc(postRef, {
-          [`emojiReactions.${icon.emojiType}`]: increment(1),
+          [`emojiReactions.${icon.emojiType}`]: increment(incrementValue),
+          updatedAt: serverTimestamp(), // Update the updatedAt field with server timestamp
         });
-        // Update the local count and voted state
-        icon.count = emojiReactions[icon.emojiType] + 1;
-        icon.voted = true;
-      } else {
-        // Decrement the Firestore count
-        await updateDoc(postRef, {
-          [`emojiReactions.${icon.emojiType}`]: increment(-1),
-        });
-        // Update the local count and voted state
-        icon.count = emojiReactions[icon.emojiType] - 1;
-        icon.voted = false;
+
+        console.log(`Emoji '${icon.emojiType}' updated by ${incrementValue}`);
+
+        // Toggle the vote state locally
+        icon.voted = !icon.voted;
+
+      } catch (error) {
+        console.error("Error updating document: ", error);
       }
-    }
-  },
+    },
+  }
 };
 </script>
 

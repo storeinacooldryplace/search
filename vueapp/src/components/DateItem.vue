@@ -6,7 +6,7 @@
     </div>
     <ul v-if="showItems">
       <ListItem v-for="(item, index) in items" :key="index" :title="item.title" :url="item.url"
-        :time="item.visitItem[0].visitTime" />
+        :time="item.visitItem[0].visitTime" :postId="item.postId || 'default-postId'" />
     </ul>
   </div>
 </template>
@@ -27,19 +27,22 @@ export default {
     items: {
       type: Array,
       required: true,
-    },
+    }
   },
   data() {
     return {
-      showItems: true, // Set this to true to have all DateItem lists open by default
-      downArrow: require('@/assets/down-arrow.png'), // Path to the down arrow image
-      rightArrow: require('@/assets/right-arrow.png'), // Path to the right arrow image
+      showItems: true,
+      downArrow: require('@/assets/down-arrow.png'),
+      rightArrow: require('@/assets/right-arrow.png'),
     };
   },
   computed: {
     formattedDate() {
-      return this.date; // You can format it here based on your needs
+      return this.date;
     },
+  },
+  mounted() {
+    console.log("herej's Date logging items: ", this.items)
   },
   methods: {
     toggleItems() {

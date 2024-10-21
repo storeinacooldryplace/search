@@ -1,7 +1,5 @@
 <template>
   <li class="list-item">
-
-
     <div id="search-info">
       <img id="search-icon" src="@/assets/magnifying.svg">
       <a :href="url" class="linked-title">{{ title }}</a>
@@ -9,8 +7,8 @@
     </div>
 
     <!-- Move EmojiMenu below search-info -->
-    <div id="search-react">
-      <EmojiMenu :title="title" />
+    <div v-if="postId !== '0'" id="search-react">
+      <EmojiMenu :title="title" :postId="postId" />
     </div>
 
   </li>
@@ -37,6 +35,12 @@ export default {
       type: String,
       required: true,
     },
+    postId: {
+      type: String,
+    }
+  },
+  mounted() {
+    console.log("listitem postId: ", this.postId)
   },
   computed: {
     formattedTime() {

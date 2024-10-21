@@ -9,7 +9,7 @@
           <span @click="toggleView('recent')" :class="{ active: currentView === 'recent' }">Recent</span>
         </header>
 
-        <TimelineComponent class="timeline" :history="mergedHistory" />
+        <TimelineComponent v-if="history.every(entry => entry.postId !== '0')" class="timeline" :history="history" />
       </div>
 
       <div v-else-if="currentPage === 'about'">
@@ -25,7 +25,7 @@
 import TimelineComponent from './components/TimelineComponent.vue';
 import AboutPage from './components/AboutPage.vue';
 import { db } from '@/firebase'; // Import your Firebase configuration
-import { addDoc, doc, getDoc, collection } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import LeftSidebar from './components/LeftSidebar.vue';
 import RightSidebar from './components/RightSidebar.vue';
 
@@ -44,45 +44,52 @@ export default {
       currentView: 'recent',
     };
   },
-  computed: {
-    mergedHistory() {
-      return this.history.map(entry => ({
-        ...entry // Default vote count to 0
-      }));
-    },
-  },
   mounted() {
     this.fetchData(); // Fetch API data on component mount
   },
   methods: {
     async fetchData() {
       try {
-        const response = await fetch('http://165.227.86.130:1000/api'); // Replace with your API endpoint
+        const response = await fetch("http://165.227.86.130:1000/api");
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();
-        this.history = data; // Assign data to history
+        // Array to store updated data
+        const updatedData = []
 
-        for (const entry of data) {
-          const postRef = doc(db, 'posts', entry.postId); // Using postId for Firestore document reference
+        data.forEach(d => {
+          d.postId = "0"; // Initialize postId to "0" for all entries
+        });
 
-          const docSnap = await getDoc(postRef); // Check if the document exists
-
-          if (!docSnap.exists()) {
+        for (const d of data) {
+          if (d.postId === "0") {
             const newDocData = {
+              title: d.title,
+              url: d.url,
+              date: d.date,
               emojiReactions: {
                 heart: 0,
                 question: 0,
                 surprise: 0,
               },
-              content: entry.content, // Assuming 'entry.content' is what you want to store
               createdAt: new Date(),
               updatedAt: new Date(),
             };
 
-            // Create a new document and get the generated postId
-            const docRef = await addDoc(collection(db, 'posts'), newDocData);
-            entry.postId = docRef.id; // Store the ID of the newly created document in the entry
+            try {
+              const docRef = await addDoc(collection(db, 'posts'), newDocData);
+              console.log('Document written with ID: ', docRef.id); // Logging the new document ID
+              d.postId = docRef.id; // Assign the ID to the local data
+            } catch (error) {
+              console.error('Error adding document: ', error);
+            }
           }
+          updatedData.push(d); // Push the updated data to the array
         }
+        console.log(updatedData)
+
+        this.history = updatedData; // Update the local state once
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -92,8 +99,6 @@ export default {
     toggleView(view) {
       this.currentView = view;
     },
-
-
   },
 };
 </script>
