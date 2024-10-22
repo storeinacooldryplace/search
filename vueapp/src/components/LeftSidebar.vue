@@ -1,6 +1,6 @@
 <template>
   <aside id="left-sidebar">
-    <img id="title-logo" src="../assets/search-logo.png" />
+    <img id="title-logo" src="../assets/simple-search-logo.png" />
     <div class="icon-container">
       <div class="icon-link" @click.prevent="$emit('changePage', 'home')">
         <img src="../assets/home-icon.svg" alt="Home" />
