@@ -107,7 +107,6 @@ export default {
 
         console.log("here's snapshot first docs: ", snapshot.docs[0])
 
-
         if (!snapshot.empty) {
           const mostRecentDoc = snapshot.docs[0];
           const visitTime = mostRecentDoc.data().visitTime;
