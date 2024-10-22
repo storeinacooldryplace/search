@@ -25,7 +25,7 @@
 import TimelineComponent from './components/TimelineComponent.vue';
 import AboutPage from './components/AboutPage.vue';
 import { db } from '@/firebase'; // Import your Firebase configuration
-import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import LeftSidebar from './components/LeftSidebar.vue';
 import RightSidebar from './components/RightSidebar.vue';
 
@@ -52,47 +52,66 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const response = await fetch(APIURL);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
+        const response = await fetch(APIURL); // Fetch data from the API
+        const data = await response.json(); // Parse the JSON response
         const updatedData = []; // Array to store updated data
 
         for (const d of data) {
-          // Check if a document with this postId already exists in Firebase
-          const postRef = doc(db, 'posts', d.postId || '0');
-          const docSnap = await getDoc(postRef);
+          // Use d.visitItem.id as the unique ID for Firestore documents
+
+
+
+          if (!d.visitItem || !d.visitItem[0] || !d.visitItem[0].id) {
+            console.error(`Missing visitItem[0] or visitItem[0].id for entry:`, d);
+            continue; // Skip this entry if visitItem[0] or id is missing
+          }
+
+          console.log("here's the unique ID: ", d.visitItem[0].id)
+
+          let postId = d.visitItem[0].id; // Use visitItem[0].id as the doc ID
+          let visitTime = d.visitItem[0].visitTime;
+          console.log(postId)
+          const postRef = doc(db, 'posts', postId);
+
+          const docSnap = await getDoc(postRef); // Check if the document already exists
 
           if (!docSnap.exists()) {
+            // If the document doesn't exist, create it using setDoc
             const newDocData = {
-              title: d.title,
-              url: d.url,
-              date: d.date,
+              title: d.title, // Assuming d.title exists
+              url: d.url, // Assuming d.url exists
+              date: d.date, // Assuming d.date exists
               emojiReactions: {
                 heart: 0,
                 question: 0,
                 surprise: 0,
               },
+              visitTime: d.visitItem[0].visitTime,
+              postId: postId, // Adding postId to the document
               createdAt: new Date(),
               updatedAt: new Date(),
             };
 
-            try {
-              const docRef = await addDoc(collection(db, 'posts'), newDocData);
-              console.log('Document written with ID: ', docRef.id);
-              d.postId = docRef.id; // Assign the ID to the local data
-            } catch (error) {
-              console.error('Error adding document: ', error);
-            }
+            // Set the document with the unique visitItem.id
+            await setDoc(postRef, newDocData);
+            console.log(`Document created with ID: `, postId);
           } else {
-            d.postId = docSnap.id; // Use the existing document ID
+            // Document already exists, log this or take other necessary actions
+            console.log('Document already exists with ID: ', postId);
           }
 
-          updatedData.push(d); // Push the updated data to the array
+          // Assign the postId in the local object (for use in Vue app)
+          d.postId = d.visitItem[0].id;
+          d.visitTime = d.visitItem[0].visitTime;
+          console.log("console logging d.postId for local vue use: ", d.postId)
+
+          // Push the updated object to the updatedData array
+          updatedData.push(d);
         }
 
-        this.history = updatedData; // Update the local state once
+        // Update the local state with the updated data
+        this.history = updatedData;
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
