@@ -25,7 +25,7 @@
 import TimelineComponent from './components/TimelineComponent.vue';
 import AboutPage from './components/AboutPage.vue';
 import { db } from '@/firebase'; // Import your Firebase configuration
-import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import LeftSidebar from './components/LeftSidebar.vue';
 import RightSidebar from './components/RightSidebar.vue';
 
@@ -66,7 +66,6 @@ export default {
           console.log("here's the unique ID: ", d.visitItem[0].id);
 
           let postId = d.visitItem[0].id; // Use visitItem[0].id as the doc ID
-          let visitTime = d.visitItem[0].visitTime;
 
           const postRef = doc(db, 'posts', postId);
 
