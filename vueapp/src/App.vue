@@ -69,7 +69,6 @@ export default {
           console.log("here's the unique ID: ", d.visitItem[0].id)
 
           let postId = d.visitItem[0].id; // Use visitItem[0].id as the doc ID
-          let visitTime = d.visitItem[0].visitTime;
           console.log(postId)
           const postRef = doc(db, 'posts', postId);
 
