@@ -1,7 +1,7 @@
 <template>
   <div class="user-profile">
 
-    <div class="user-banner"></div>
+    <img class="user-banner" src="@/assets/bliss.webp">
     <img class="user-pfp" src="@/assets/headshot2.jpg">
     <div class="user-text">
       <div class="user-ID">
@@ -174,9 +174,10 @@ p {
 
 .user-banner {
   width: 100%;
-  height: 150px;
+  height: 200px;
   background-color: #e1e8ed;
-  border-radius: 0%
+  border-radius: 0%;
+  margin-bottom: -40px;
 }
 
 .user-pfp {

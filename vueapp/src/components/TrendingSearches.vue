@@ -84,6 +84,10 @@ export default {
 .trending-list {
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   gap: 15px;
+=======
+  gap: 10px;
+>>>>>>> light-ux-improv
 }
 </style>
