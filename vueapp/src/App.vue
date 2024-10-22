@@ -25,9 +25,11 @@
 import TimelineComponent from './components/TimelineComponent.vue';
 import AboutPage from './components/AboutPage.vue';
 import { db } from '@/firebase'; // Import your Firebase configuration
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 import LeftSidebar from './components/LeftSidebar.vue';
 import RightSidebar from './components/RightSidebar.vue';
+
+const APIURL = "http://165.227.86.130:1000/api"
 
 export default {
   name: 'App',
@@ -50,20 +52,19 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const response = await fetch("http://165.227.86.130:1000/api");
+        const response = await fetch(APIURL);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        // Array to store updated data
-        const updatedData = []
-
-        data.forEach(d => {
-          d.postId = "0"; // Initialize postId to "0" for all entries
-        });
+        const updatedData = []; // Array to store updated data
 
         for (const d of data) {
-          if (d.postId === "0") {
+          // Check if a document with this postId already exists in Firebase
+          const postRef = doc(db, 'posts', d.postId || '0');
+          const docSnap = await getDoc(postRef);
+
+          if (!docSnap.exists()) {
             const newDocData = {
               title: d.title,
               url: d.url,
@@ -79,18 +80,19 @@ export default {
 
             try {
               const docRef = await addDoc(collection(db, 'posts'), newDocData);
-              console.log('Document written with ID: ', docRef.id); // Logging the new document ID
+              console.log('Document written with ID: ', docRef.id);
               d.postId = docRef.id; // Assign the ID to the local data
             } catch (error) {
               console.error('Error adding document: ', error);
             }
+          } else {
+            d.postId = docSnap.id; // Use the existing document ID
           }
+
           updatedData.push(d); // Push the updated data to the array
         }
-        console.log(updatedData)
 
         this.history = updatedData; // Update the local state once
-
       } catch (error) {
         console.error('Error fetching data:', error);
       }

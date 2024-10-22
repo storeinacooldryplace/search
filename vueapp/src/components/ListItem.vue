@@ -2,7 +2,7 @@
   <li class="list-item">
     <div id="search-info">
       <img id="search-icon" src="@/assets/magnifying.svg">
-      <a :href="url" class="linked-title">{{ title }}</a>
+      <a :href="fullUrl" class="linked-title">{{ title }}</a>
       <span class="time">{{ formattedTime }}</span>
     </div>
 
@@ -43,6 +43,10 @@ export default {
     console.log("listitem postId: ", this.postId)
   },
   computed: {
+    fullUrl() {
+      // Reassemble the full URL by adding the prefix back
+      return `https://www.google.com/search?${this.url}`;
+    },
     formattedTime() {
       // Format the time as needed
       return new Date(this.time).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).toLowerCase(); // Example formatting

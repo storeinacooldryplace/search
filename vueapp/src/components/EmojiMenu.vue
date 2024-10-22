@@ -63,42 +63,54 @@ export default {
     setupListener() {
       const postRef = doc(db, 'posts', this.postId);
 
+      // Real-time listener to sync with Firestore
       onSnapshot(postRef, (doc) => {
         if (doc.exists()) {
           const data = doc.data();
-          console.log("Real-time update from Firestore: ", data); // Log real-time updates
-          this.updateEmojiCounts(data.emojiReactions);
+          console.log("Real-time update from Firestore: ", data.emojiReactions);
+          this.updateEmojiCounts(data.emojiReactions); // Sync emoji counts from Firestore
         }
       });
     },
     updateEmojiCounts(emojiReactions) {
-      // Update emoji counts from Firestore
       this.icons.forEach((icon) => {
-        icon.count = emojiReactions[icon.emojiType] || 0; // Ensure count defaults to 0 if undefined
+        // Only update the count if emoji reaction exists in Firestore
+        icon.count = emojiReactions[icon.emojiType] || 0;
       });
     },
+
     async toggleCount(index) {
       const icon = this.icons[index];
       const postRef = doc(db, 'posts', this.postId);
 
       try {
-        const incrementValue = icon.voted ? -1 : 1; // Increment if not voted, decrement if voted
+        // Fetch the most recent state of the document
 
-        // Update Firestore with the new emoji count and set the updatedAt timestamp
-        await updateDoc(postRef, {
-          [`emojiReactions.${icon.emojiType}`]: increment(incrementValue),
-          updatedAt: serverTimestamp(), // Update the updatedAt field with server timestamp
-        });
+        if (!icon.voted) {
+          // Increment in Firestore
+          await updateDoc(postRef, {
+            [`emojiReactions.${icon.emojiType}`]: increment(1),
+            updatedAt: serverTimestamp(),
+          });
+          console.log(`Incremented reaction for ${icon.emojiType}.`);
+        } else {
+          // Decrement in Firestore
+          await updateDoc(postRef, {
+            [`emojiReactions.${icon.emojiType}`]: increment(-1),
+            updatedAt: serverTimestamp(),
+          });
+          console.log(`Decremented reaction for ${icon.emojiType}.`);
+        }
 
-        console.log(`Emoji '${icon.emojiType}' updated by ${incrementValue}`);
+        // No manual update to icon.count here, let the onSnapshot handle it
 
-        // Toggle the vote state locally
+        // Toggle local voted state
         icon.voted = !icon.voted;
 
       } catch (error) {
-        console.error("Error updating document: ", error);
+        console.error("Error updating Firestore document: ", error);
       }
-    },
+    }
   }
 };
 </script>
