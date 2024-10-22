@@ -1,6 +1,6 @@
 <template>
   <div class="user-profile">
-    <div class="user-banner"></div>
+    <img class="user-banner" src="@/assets/bliss.webp">
     <img class="user-pfp" src="@/assets/headshot2.jpg">
     <div class="user-stats">
 
