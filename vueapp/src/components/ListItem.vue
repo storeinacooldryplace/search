@@ -2,7 +2,7 @@
   <li class="list-item">
     <div id="search-info">
       <img id="search-icon" src="@/assets/magnifying.svg">
-      <a :href="fullUrl" class="linked-title">{{ title }}</a>
+      <a :href="url" class="linked-title">{{ title }}</a>
       <span class="time">{{ formattedTime }}</span>
     </div>
 
