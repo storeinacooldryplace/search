@@ -2,8 +2,8 @@
   <div class="trend-container">
     <img src="@/assets/magnifying.svg">
     <div class="trend">
-      <div id="trend-text">mark wahlberg</div>
-      <div id="likes">6 likes</div>
+      <div id="trend-text">{{ title }}</div>
+      <div id="likes">{{ totalReactions }} reactions</div>
     </div>
 
   </div>
@@ -12,6 +12,20 @@
 <script>
 export default {
   name: 'TrendingSearch',
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+    totalReactions: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {};
   }
