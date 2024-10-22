@@ -68,8 +68,8 @@ export default {
 
           console.log("here's the unique ID: ", d.visitItem[0].id)
 
-
           let postId = d.visitItem[0].id; // Use visitItem[0].id as the doc ID
+          let visitTime = d.visitItem[0].visitTime;
           console.log(postId)
           const postRef = doc(db, 'posts', postId);
 
@@ -86,6 +86,7 @@ export default {
                 question: 0,
                 surprise: 0,
               },
+              visitTime: d.visitItem[0].visitTime,
               postId: postId, // Adding postId to the document
               createdAt: new Date(),
               updatedAt: new Date(),
@@ -101,6 +102,7 @@ export default {
 
           // Assign the postId in the local object (for use in Vue app)
           d.postId = d.visitItem[0].id;
+          d.visitTime = d.visitItem[0].visitTime;
           console.log("console logging d.postId for local vue use: ", d.postId)
 
           // Push the updated object to the updatedData array

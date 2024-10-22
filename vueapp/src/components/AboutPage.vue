@@ -10,11 +10,11 @@
       </div>
       <div class="user-stats">
         <span class="stat"><b>2 people</b> here right now</span>
-        <span class="stat"> <b>6 hours </b> since last search </span>
+        <span class="stat"> <b>{{ timeSinceLastSearch }} </b> since last search </span>
         <span class="stat"><b>2.6k </b>visitors</span>
         <span class="stat"><b>33</b> followers</span>
-        <span class="stat"><b>42</b> likes</span>
-        <span class="stat"><b>412 searches</b> since beginning</span>
+        <span class="stat"><b>{{ totalReactions }}</b> likes</span>
+        <span class="stat"><b>{{ totalSearches }} searches</b> since beginning</span>
         <span class="stat"><b>323 days</b> until the website goes down</span>
         <span class="stat"><a href="http://storeinacooldryplace.cargo.site">portfolio</a> or <a
             href="http://instagram.com/psychobath">IG</a></span>
@@ -56,8 +56,90 @@
 </template>
 
 <script>
+import { db } from '@/firebase';
+import { collection, onSnapshot, query, orderBy, limit } from 'firebase/firestore';
+
 export default {
   name: 'AboutPage',
+  data() {
+    return {
+      totalReactions: 0,
+      totalSearches: 0,
+      timeSinceLastSearch: ''
+    };
+  },
+  mounted() {
+    this.getTotalStats();
+    this.getTimeSinceLastSearch();
+  },
+  methods: {
+    getTotalStats() {
+      const postsCollection = collection(db, 'posts');
+
+      // Listen to real-time updates for all documents in the "posts" collection
+      onSnapshot(postsCollection, (snapshot) => {
+        let totalReactionsCount = 0;
+        let totalDocsCount = snapshot.size; // Get the total number of documents
+
+        // Loop through each document in the collection
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          const emojiReactions = data.emojiReactions;
+
+          // Sum the emoji reactions (heart, question, surprise)
+          if (emojiReactions) {
+            totalReactionsCount += emojiReactions.heart || 0;
+            totalReactionsCount += emojiReactions.question || 0;
+            totalReactionsCount += emojiReactions.surprise || 0;
+          }
+        });
+
+        // Update the totalReactions and totalSearches variables in real-time
+        this.totalReactions = totalReactionsCount;
+        this.totalSearches = totalDocsCount; // Update total searches (docs)
+      });
+    },
+    getTimeSinceLastSearch() {
+      const postsCollection = collection(db, 'posts');
+      const q = query(postsCollection, orderBy('visitTime', 'desc'), limit(1)); // Query the most recent search
+
+      onSnapshot(q, (snapshot) => {
+
+        console.log("here's snapshot first docs: ", snapshot.docs[0])
+
+
+        if (!snapshot.empty) {
+          const mostRecentDoc = snapshot.docs[0];
+          const visitTime = mostRecentDoc.data().visitTime;
+
+          // Get the current timestamp and compute the difference
+          const currentTime = Date.now();
+          const timeDifference = currentTime - visitTime;
+
+          this.timeSinceLastSearch = this.formatTimeSince(timeDifference);
+        } else {
+          this.timeSinceLastSearch = 'No searches yet';
+        }
+      });
+    },
+
+    formatTimeSince(milliseconds) {
+      const seconds = Math.floor(milliseconds / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (days > 0) {
+        return `${days} days ago`;
+      } else if (hours > 0) {
+        return `${hours} hours ago`;
+      } else if (minutes > 0) {
+        return `${minutes} minutes ago`;
+      } else {
+        return `${seconds} seconds ago`;
+      }
+    },
+  },
 };
 </script>
 
