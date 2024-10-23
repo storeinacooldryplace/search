@@ -18,7 +18,6 @@
         <span class="stat"><b>323 days</b> until the website goes down</span>
         <span class="stat"><a href="http://storeinacooldryplace.cargo.site">portfolio</a> or <a
             href="http://instagram.com/psychobath">IG</a></span>
-
       </div>
 
     </div>
@@ -37,6 +36,8 @@
           <span id="username">@psychobath</span>
         </div>
 
+
+
         <div id="tweet-content">
 
           Search History is a conceptual web performance by Justine Jung. Between November 7, 2024 to November 7, 2025,
@@ -47,9 +48,11 @@
           of surrendering privacy in exchange for attention.
         </div>
 
-      </div>
 
+
+      </div>
       <div id="time">3 days ago</div>
+
     </div>
 
   </div>
@@ -209,7 +212,7 @@ p {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  flex-direction: row
+  flex-direction: row;
 }
 
 .tweet img {
@@ -250,7 +253,7 @@ p {
   font-size: 25px;
   margin: 0;
   padding-top: 5px;
-  width: 100%;
+  width: 120%;
   line-height: 1.5;
 }
 
