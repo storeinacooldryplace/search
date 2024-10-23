@@ -73,7 +73,7 @@ export default {
 }
 
 .date-header {
-  padding-top: 10px
+  padding-top: 5px
 }
 
 #date-container {

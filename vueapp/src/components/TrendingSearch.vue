@@ -37,7 +37,7 @@ export default {
   padding: 5px;
   display: flex;
   flex-direction: row;
-  gap: 10px
+  gap: 10px;
 }
 
 .trend-container img {
@@ -46,7 +46,7 @@ export default {
 
 .trend {
   margin-top: 20px;
-  gap: 5px;
+  gap: 15px;
 }
 
 #trend-text {

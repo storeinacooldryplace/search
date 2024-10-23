@@ -53,8 +53,8 @@ export default {
 .emoji-icon:hover {}
 
 .icon {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   padding: 5px;
   border-radius: 50%;
 }

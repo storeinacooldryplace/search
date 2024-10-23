@@ -1,14 +1,16 @@
 <template>
   <aside id="left-sidebar">
-    <img id="title-logo" src="../assets/simple-search.png" />
-    <div class="icon-container">
-      <div class="icon-link" @click.prevent="$emit('changePage', 'home')">
-        <img src="../assets/home-icon.svg" alt="Home" />
-        <span class="icon-label">Home</span>
-      </div>
-      <div class="icon-link" @click.prevent="$emit('changePage', 'about')">
-        <img src="../assets/profile.webp" alt="Info" />
-        <span class="icon-label">Info</span>
+    <div id="sidebar-stuff">
+      <img id="title-logo" src="../assets/bliss.webp" />
+      <div class="icon-container">
+        <div class="icon-link" @click.prevent="$emit('changePage', 'home')">
+          <img src="../assets/home-icon.svg" alt="Home" />
+          <span class="icon-label">Home</span>
+        </div>
+        <div class="icon-link" @click.prevent="$emit('changePage', 'about')">
+          <img src="../assets/profile.webp" alt="Info" />
+          <span class="icon-label">Info</span>
+        </div>
       </div>
     </div>
   </aside>
@@ -26,8 +28,18 @@ export default {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: flex-start;
   border-right: 0.5px solid #e6e5e5;
+}
+
+#sidebar-stuff {
+  margin-right: -50%;
+}
+
+#title-logo {
+  width: 100px;
+  height: auto;
 }
 
 .icon-container {

@@ -5,8 +5,8 @@
     <main id="main-content">
       <div v-if="currentPage === 'home'">
         <header id="timeline-header">
-          <span @click="toggleView('top')" :class="{ active: currentView === 'top' }">Top</span>
-          <span @click="toggleView('recent')" :class="{ active: currentView === 'recent' }">Recent</span>
+          <span @click="toggleView('top')" :class="{ active: currentView === 'top' }">For you</span>
+          <span @click="toggleView('recent')" :class="{ active: currentView === 'recent' }">Following</span>
         </header>
 
         <TimelineComponent v-if="history.every(entry => entry.postId !== '0')" class="timeline" :history="history" />
@@ -127,6 +127,11 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: 'Mukta';
+  src: url('@/assets/fonts/Mukta-Regular.ttf') format('truetype');
+}
+
 /* Your existing styles remain unchanged */
 #app-container {
   display: grid;
@@ -138,31 +143,24 @@ export default {
   max-width: 1200px;
 }
 
-#title-logo {
-  display: block;
-  width: 100px;
-  height: auto;
-}
-
 #main-content {}
 
 #timeline-header {
   display: flex;
   justify-content: center;
-  gap: 220px;
-  padding: 100px 0 0 0;
+  padding: 10px;
   border-bottom: 1px solid #f7f6f6;
-  font-size: 20px;
+  font-size: 12px;
   align-items: center;
+  gap: 20%;
+  font-family: 'Mukta';
 }
 
 #timeline-header span {
   cursor: pointer;
   color: grey;
-  font-size: 30px;
   padding-left: 10px;
   padding-right: 10px;
-  margin-top: -100px;
   /* Adjust this value as needed to shift the text up */
   position: relative;
   /* Necessary for the ::before pseudo-element */
@@ -177,12 +175,12 @@ export default {
 #timeline-header span.active::before {
   content: '';
   display: block;
-  height: 6px;
+  height: 3px;
   background-color: rgb(23, 170, 20);
   width: 100px;
   /* Width of the highlight bar */
   position: absolute;
-  bottom: -20px;
+  bottom: -12px;
   left: 50%;
   transform: translateX(-50%);
   /* Centers the highlight bar relative to the text */

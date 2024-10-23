@@ -59,7 +59,7 @@ export default {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   margin-bottom: 10px;
   object-fit: cover;
-  margin-top: -20%
+  margin-top: -25%
 }
 
 .user-stats {

@@ -212,8 +212,6 @@ p {
   flex-direction: row
 }
 
-
-
 .tweet img {
   width: 70px;
   height: 70px;

@@ -68,6 +68,7 @@ li {
   align-items: left;
   gap: 5px;
   flex-direction: column;
+  margin-left: -30px;
 }
 
 .linked-title {
@@ -86,5 +87,6 @@ a {
 .time {
   margin: 0;
   color: rgb(152, 151, 151);
+  font-size: 14px;
 }
 </style>

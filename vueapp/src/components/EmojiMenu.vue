@@ -33,11 +33,11 @@ export default {
     return {
       icons: [
         {
-          src: require('@/assets/empty-heart.svg'),
+          src: require('@/assets/laugh.png'),
           count: 0,
           voted: false,
-          hoverColor: 'rgba(255, 0, 0, 0.2)',
-          emojiType: 'heart',
+          hoverColor: 'rgba(249,207,47, 0.2)',
+          emojiType: 'laugh',
         },
         {
           src: require('@/assets/question.png'),
@@ -47,10 +47,17 @@ export default {
           emojiType: 'question',
         },
         {
+          src: require('@/assets/empty-heart.svg'),
+          count: 0,
+          voted: false,
+          hoverColor: 'rgba(255, 0, 0, 0.2)',
+          emojiType: 'heart',
+        },
+        {
           src: require('@/assets/exclamation.png'),
           count: 0,
           voted: false,
-          hoverColor: 'rgba(0, 0, 255, 0.2)',
+          hoverColor: 'rgb(29, 161, 242, 0.2)',
           emojiType: 'surprise',
         },
       ],
@@ -123,12 +130,13 @@ export default {
 
 .emoji-icons {
   display: flex;
-  gap: 100px;
+
+  margin-left: -15px;
   /* Space between icons */
   align-items: center;
   /* Align items vertically centered */
   justify-content: space-around;
   /* Align items to the start (left) */
-  width: 100%;
+  width: 80%;
 }
 </style>
