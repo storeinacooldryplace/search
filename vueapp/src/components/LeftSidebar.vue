@@ -76,4 +76,16 @@ export default {
   display: inline-block;
   font-size: 20px;
 }
+
+@media (max-width: 1024px) {
+  #left-sidebar {
+    width: 80px;
+    /* Optional: reduce width */
+  }
+
+  .icon-label {
+    display: none;
+    /* Hide icon labels */
+  }
+}
 </style>
